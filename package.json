@@ -1,6 +1,6 @@
 {
   "name": "cdproject",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Fast project directory switch helper",
   "type": "module",
   "bin": {
