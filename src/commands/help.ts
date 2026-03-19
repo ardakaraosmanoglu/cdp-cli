@@ -14,7 +14,8 @@ const commands = [
   { name: "cdp export", desc: "Export config to stdout as JSON" },
   { name: "cdp import [file]", desc: "Import config from file or stdin" },
   { name: "cdp <project>", desc: "Switch to a saved project (cd into it)" },
-  { name: "cdp --help", desc: "Show built-in help" },
+  { name: "cdp version", desc: "Show version and check for updates" },
+  { name: "cdp help", desc: "Show all commands and how to use them" },
 ];
 
 export async function helpCommand(): Promise<void> {
@@ -28,5 +29,6 @@ export async function helpCommand(): Promise<void> {
     console.log(`  ${colors.info(paddedName)}${cmd.desc}`);
   }
 
-  console.log(`\n${colors.dim("Run 'cdp <command> --help' for more information on a command.")}\n`);
+  console.log(`\n${colors.dim("Run 'cdp <command> --help' for more information on a command.")}`);
+  console.log(`${colors.dim("Update: npm install -g cdproject@latest")}\n`);
 }

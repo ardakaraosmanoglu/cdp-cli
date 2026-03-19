@@ -35,7 +35,7 @@ export async function checkForUpdates(): Promise<void> {
   }
 }
 
-async function getPackageVersion(): Promise<{ name: string; version: string }> {
+export async function getPackageVersion(): Promise<{ name: string; version: string }> {
   const pkgPath = join(process.cwd(), "package.json");
   try {
     const content = await readFile(pkgPath, "utf8");
@@ -70,7 +70,7 @@ async function saveCache(data: CacheData): Promise<void> {
   await atomicWriteJson(cachePath, data);
 }
 
-async function fetchLatestVersion(packageName: string): Promise<string | null> {
+export async function fetchLatestVersion(packageName: string): Promise<string | null> {
   try {
     const response = await fetch(`https://registry.npmjs.org/${packageName}/latest`);
     if (!response.ok) return null;
@@ -82,7 +82,7 @@ async function fetchLatestVersion(packageName: string): Promise<string | null> {
   }
 }
 
-function isNewerVersion(latest: string, current: string): boolean {
+export function isNewerVersion(latest: string, current: string): boolean {
   const latestParts = latest.split(".").map(Number);
   const currentParts = current.split(".").map(Number);
   

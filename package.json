@@ -1,6 +1,6 @@
 {
   "name": "cdproject",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Fast project directory switch helper",
   "type": "module",
   "bin": {
@@ -23,7 +23,14 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "prepublishOnly": "npm run build && npm test"
   },
-  "keywords": ["cli", "developer-tools", "terminal", "productivity", "cd", "project-switcher"],
+  "keywords": [
+    "cli",
+    "developer-tools",
+    "terminal",
+    "productivity",
+    "cd",
+    "project-switcher"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -34,6 +41,7 @@
   },
   "author": "Arda Karaosmanoglu <ardakaraosmanoglu@outlook.com>",
   "dependencies": {
+    "cdproject": "^0.1.2",
     "commander": "^12.0.0"
   },
   "devDependencies": {

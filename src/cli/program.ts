@@ -10,6 +10,7 @@ import { exportCommand } from "../commands/export.js";
 import { importCommand } from "../commands/import.js";
 import { cleanCommand, CleanOptions } from "../commands/clean.js";
 import { helpCommand } from "../commands/help.js";
+import { versionCommand } from "../commands/version.js";
 
 export function createProgram(): Command {
   const program = new Command();
@@ -41,6 +42,7 @@ export function createProgram(): Command {
   program.command("export").description("Export config to stdout as JSON").action(exportCommand);
   program.command("import").argument("[file]").description("Import config from file or stdin").action(importCommand);
   program.command("help").description("Show all commands and how to use them").action(helpCommand);
+  program.command("version").description("Show current version and check for updates").action(versionCommand);
 
   program.arguments("[project]").action(async (project?: string) => {
     if (!project) {
