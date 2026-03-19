@@ -1,4 +1,5 @@
 import { loadConfig, saveConfig } from "../core/store.js";
+import { success } from "../utils/colors.js";
 
 export async function removeCommand(name: string): Promise<void> {
   const config = await loadConfig();
@@ -6,5 +7,5 @@ export async function removeCommand(name: string): Promise<void> {
 
   delete config.projects[name];
   await saveConfig(config);
-  console.log(`🗑️ Removed project '${name}'.`);
+  success(`Removed project '${name}'`);
 }

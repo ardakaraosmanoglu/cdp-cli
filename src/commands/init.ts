@@ -1,5 +1,6 @@
 import { loadConfig, saveConfig } from "../core/store.js";
 import { validateProjectName } from "../core/validation.js";
+import { success } from "../utils/colors.js";
 import path from "node:path";
 
 export async function initCommand(name?: string): Promise<void> {
@@ -20,5 +21,5 @@ export async function initCommand(name?: string): Promise<void> {
   };
 
   await saveConfig(config);
-  console.log(`✅ ${isUpdate ? 'Updated' : 'Saved'} '${inferredName}' -> ${cwd}`);
+  success(`${isUpdate ? 'Updated' : 'Saved'} '${inferredName}' -> ${cwd}`);
 }

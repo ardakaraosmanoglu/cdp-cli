@@ -22,3 +22,8 @@ export async function atomicWriteJson(filePath: string, data: unknown): Promise<
   await fs.writeFile(tempPath, JSON.stringify(data, null, 2), "utf8");
   await fs.rename(tempPath, filePath);
 }
+
+export async function readJsonFile<T>(filePath: string): Promise<T> {
+  const content = await fs.readFile(filePath, "utf8");
+  return JSON.parse(content) as T;
+}

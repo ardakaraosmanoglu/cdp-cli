@@ -19,10 +19,20 @@
     "build": "tsc -p tsconfig.json",
     "dev": "node --enable-source-maps ./bin/cdp.js",
     "test": "node --test",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write \"src/**/*.ts\"",
     "prepublishOnly": "npm run build && npm test"
   },
-  "keywords": ["cli", "developer-tools", "terminal", "productivity", "cd"],
+  "keywords": ["cli", "developer-tools", "terminal", "productivity", "cd", "project-switcher"],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/cdp-cli"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/cdp-cli/issues"
+  },
+  "author": "Your Name <your.email@example.com>",
   "dependencies": {
     "commander": "^12.0.0"
   },

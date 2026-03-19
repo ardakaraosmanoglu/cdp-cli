@@ -1,5 +1,6 @@
 import { loadConfig, saveConfig } from "../core/store.js";
 import { validateProjectName } from "../core/validation.js";
+import { success } from "../utils/colors.js";
 
 export async function renameCommand(oldName: string, newName: string): Promise<void> {
   validateProjectName(newName);
@@ -13,5 +14,5 @@ export async function renameCommand(oldName: string, newName: string): Promise<v
   delete config.projects[oldName];
   await saveConfig(config);
 
-  console.log(`✏️ Renamed '${oldName}' -> '${newName}'.`);
+  success(`Renamed '${oldName}' -> '${newName}'`);
 }

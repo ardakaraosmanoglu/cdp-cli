@@ -1,61 +1,166 @@
-# CDP CLI
+# cdp
 
-> Fast project directory switcher for terminal
+cdp ("CD Project") saves paths to directories you work with often.
+Instead of `cd /long/path/to/your/project`, type `cdp project`.
 
-CDP (CD Project) is a CLI tool that lets you quickly switch between project directories without typing full paths.
+Explicit naming. No fuzzy matching. No learning period. Just names you choose.
 
-## Features
+## Why cdp?
 
-- Save project paths with custom names
-- Quick directory switching with `cdp <name>`
-- Auto-infer project name from folder
-- Works with bash and zsh
-- Atomic file operations for config safety
-- Config export/import for team sharing
-- Doctor command for troubleshooting
-- Interactive project selection (no args)
-- Shell tab completion for project names
+Tools like zoxide learn your habits over time. cdp takes a different approach:
 
-## Requirements
+- **You name it** — `cdp init api` saves the current directory as "api". No guessing.
+- **It just works** — No frequency tracking, no database to maintain, no fuzzy heuristics.
+- **Team-ready** — Export and import configs. Share project shortcuts across machines.
+- **Minimal** — Single config file, atomic writes, no dependencies beyond Node.
+
+## Quick Start
+
+```sh
+cd /path/to/project
+cdp init myproject    # saves "myproject" -> /path/to/project
+
+cdp myproject         # prints /path/to/project
+cd myproject          # now you're there
+```
+
+## Installation
+
+### Prerequisites
 
 - Node.js >= 20
 - macOS, Linux, or Windows with WSL
 
-## Installation
+### From source
 
-```bash
+```sh
 git clone https://github.com/your-username/cdp-cli.git
 cd cdp-cli
 npm install
 npm run build
 npm link
-cdp setup --completion  # Install wrapper + tab completion
-source ~/.zshrc  # or source ~/.bashrc
 ```
 
-## Shell Integration
+### Shell setup
 
-CDP needs a shell wrapper to change directories. The `cdp setup` command adds it automatically, or add manually:
+cdp outputs a path. It needs a shell wrapper to change directories for you.
 
-### Interactive Mode (with wrapper)
-```bash
+```sh
+cdp setup
+source ~/.zshrc    # or source ~/.bashrc
+```
+
+For tab completion:
+
+```sh
+cdp setup --completion
+source ~/.zshrc    # or source ~/.bashrc
+```
+
+## Usage
+
+### Save a project
+
+```sh
+cd /var/www/api
+cdp init api
+```
+
+cdp infers the name from the directory if you omit it:
+
+```sh
+cdp init          # saves as "api" if directory is /var/www/api
+```
+
+### Jump to a project
+
+```sh
+cdp api
+```
+
+With the shell wrapper, `cd` happens automatically. Without it, cdp prints the path:
+
+```sh
+cdp api           # with wrapper: changes directory
+                  # without wrapper: outputs /var/www/api
+```
+
+### List all projects
+
+```sh
+cdp list
+```
+
+Output:
+
+```
+api       /var/www/api
+web       /var/www/web
+```
+
+### Remove a project
+
+```sh
+cdp remove old-project
+```
+
+### Rename a project
+
+```sh
+cdp rename api backend-api
+```
+
+### Interactive mode
+
+Run `cdp` with no arguments:
+
+```sh
 cdp
-# Shows numbered list of projects for selection
-# Select a project by number or name
 ```
 
-### Tab Completion (with --completion)
-```bash
-cdp api<TAB>  # Completes project names
-cdp <TAB>     # Shows all commands and projects
+Shows a numbered list of saved projects. Select by number or name.
+
+### Export config
+
+```sh
+cdp export > backup.json
 ```
 
-### zsh (~/.zshrc)
-```bash
+Pipe to share across machines:
+
+```sh
+cdp export | ssh other-machine 'cdp import'
+```
+
+### Import config
+
+```sh
+cdp import backup.json
+```
+
+Or from stdin:
+
+```sh
+cat backup.json | cdp import
+```
+
+### Diagnose issues
+
+```sh
+cdp doctor
+```
+
+Checks config file, saved paths, and shell integration.
+
+## Shell Wrapper
+
+The wrapper intercepts `cdp` calls and runs `cd` on the output. Here's what it does:
+
+```sh
 cdp() {
   if [ "$#" -eq 0 ]; then
-    command cdp list
-    return
+    # Interactive mode
+    # ...
   fi
 
   case "$1" in
@@ -63,115 +168,77 @@ cdp() {
       command cdp "$@"
       ;;
     *)
-      local target
-      target="$(command cdp "$@")" || return 1
-      cd "$target" || return 1
+      cd "$(command cdp "$@")" || return 1
       ;;
   esac
 }
 ```
 
-### bash (~/.bashrc)
-Same as above, add to `~/.bashrc`.
-
-## Usage
-
-### Save a project
-```bash
-cd /var/www/ecommerce-api
-cdp init api
-# Saved 'api' -> /var/www/ecommerce-api
-```
-
-### Switch directories
-```bash
-cdp api
-# Now in /var/www/ecommerce-api
-```
-
-### List all projects
-```bash
-cdp list
-# api      /var/www/ecommerce-api
-# web      /var/www/web
-```
-
-### Remove a project
-```bash
-cdp remove old-project
-# Removed 'old-project'.
-```
-
-### Rename a project
-```bash
-cdp rename api backend-api
-# Renamed 'api' -> 'backend-api'.
-```
-
-### Export config
-```bash
-cdp export > backup.json
-```
-
-### Import config
-```bash
-cdp import backup.json
-# or from stdin:
-cat backup.json | cdp import
-```
-
-### Diagnose issues
-```bash
-cdp doctor
-```
-
-## Troubleshooting
-
-### "Why isn't CDP changing directories?"
-
-CDP requires the shell wrapper. Make sure you added it to your shell config and ran `source`:
-
-```bash
-# Check if wrapper is installed
-grep "cdp()" ~/.zshrc
-
-# If not, run setup again
-cdp setup
-source ~/.zshrc
-```
-
-### "Project not found"
-```bash
-# Check your saved projects
-cdp list
-
-# Verify the project exists
-cdp doctor
-```
-
-### "Config corrupted"
-```bash
-# Backup and reset
-cdp export > backup.json
-rm ~/.cdp/projects.json
-cdp init my-project
-```
+Add it manually to `~/.zshrc` or `~/.bashrc` if `cdp setup` doesn't work.
 
 ## Configuration
 
-Projects are stored in `~/.cdp/projects.json`:
+Config lives at `~/.cdp/projects.json`.
+
 ```json
 {
   "version": 1,
   "projects": {
     "api": {
       "path": "/var/www/api",
-      "createdAt": "2026-03-19T10:00:00.000Z",
-      "updatedAt": "2026-03-19T10:00:00.000Z"
+      "createdAt": "2024-01-15T10:00:00.000Z",
+      "updatedAt": "2024-01-15T10:00:00.000Z"
     }
   }
 }
 ```
+
+Atomic writes prevent corruption if the process is interrupted.
+
+## Troubleshooting
+
+### "cdp isn't changing directories"
+
+The shell wrapper is missing or not loaded.
+
+```sh
+grep "cdp()" ~/.zshrc
+```
+
+If empty, run `cdp setup` again and `source ~/.zshrc`.
+
+### "Project not found"
+
+```sh
+cdp list           # check what exists
+cdp doctor         # diagnose config and paths
+```
+
+### "Config corrupted"
+
+```sh
+cdp export > backup.json    # save what you have
+rm ~/.cdp/projects.json     # delete config
+cdp init myproject          # recreate
+```
+
+### Interactive mode not working
+
+Make sure the shell wrapper includes the interactive selection block. If you added `cdp()` manually, copy the full function from the installation section.
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `cdp init [name]` | Save current directory |
+| `cdp list` | List all saved projects |
+| `cdp remove <name>` | Remove a project |
+| `cdp rename <old> <new>` | Rename a project |
+| `cdp setup [--completion]` | Add shell wrapper |
+| `cdp doctor` | Diagnose config and integration |
+| `cdp export` | Export config to stdout |
+| `cdp import [file]` | Import config from file or stdin |
+| `cdp <name>` | Jump to project |
 
 ## License
 

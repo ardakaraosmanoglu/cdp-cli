@@ -1,6 +1,9 @@
 import { createProgram } from "./cli/program.js";
+import { checkForUpdates } from "./utils/update-checker.js";
 
 async function main(): Promise<void> {
+  await checkForUpdates();
+  
   try {
     await createProgram().parseAsync(process.argv);
   } catch (error) {
