@@ -1,5 +1,5 @@
 {
-  "name": "cdp-cli",
+  "name": "cdproject",
   "version": "0.1.0",
   "description": "Fast project directory switch helper",
   "type": "module",
