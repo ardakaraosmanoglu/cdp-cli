@@ -34,7 +34,7 @@ cd myproject          # now you're there
 ### From source
 
 ```sh
-git clone https://github.com/your-username/cdp-cli.git
+git clone https://github.com/ardakaraosmanoglu/cdp-cli.git
 cd cdp-cli
 npm install
 npm run build

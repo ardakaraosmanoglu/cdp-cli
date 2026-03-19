@@ -8,6 +8,7 @@ import { setupCommand } from "../commands/setup.js";
 import { doctorCommand } from "../commands/doctor.js";
 import { exportCommand } from "../commands/export.js";
 import { importCommand } from "../commands/import.js";
+import { cleanCommand, CleanOptions } from "../commands/clean.js";
 
 export function createProgram(): Command {
   const program = new Command();
@@ -24,6 +25,18 @@ export function createProgram(): Command {
   });
 
   program.command("doctor").description("Diagnose config and shell integration").action(doctorCommand);
+  
+  const cleanCmd = program.command("clean").description("Remove dead projects (that no longer exist on disk)");
+  cleanCmd.option("-n, --dry-run", "List dead projects without removing").action(async (options) => {
+    await cleanCommand({ dryRun: true });
+  });
+  cleanCmd.option("-f, --force", "Remove without confirmation").action(async () => {
+    await cleanCommand({ force: true });
+  });
+  cleanCmd.action(async () => {
+    await cleanCommand({});
+  });
+
   program.command("export").description("Export config to stdout as JSON").action(exportCommand);
   program.command("import").argument("[file]").description("Import config from file or stdin").action(importCommand);
 
