@@ -17,7 +17,12 @@ export function createProgram(): Command {
   program.command("list").description("List all saved projects").action(listCommand);
   program.command("remove").argument("<name>").description("Remove a saved project").action(removeCommand);
   program.command("rename").argument("<oldName>").argument("<newName>").description("Rename a saved project").action(renameCommand);
-  program.command("setup").description("Add shell wrapper to ~/.zshrc or ~/.bashrc").action(setupCommand);
+  
+  const setupCmd = program.command("setup").description("Add shell wrapper to ~/.zshrc or ~/.bashrc");
+  setupCmd.option("-c, --completion", "Also enable shell tab completion").action(async (options) => {
+    await setupCommand({ completion: true });
+  });
+
   program.command("doctor").description("Diagnose config and shell integration").action(doctorCommand);
   program.command("export").description("Export config to stdout as JSON").action(exportCommand);
   program.command("import").argument("[file]").description("Import config from file or stdin").action(importCommand);

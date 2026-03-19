@@ -13,6 +13,8 @@ CDP (CD Project) is a CLI tool that lets you quickly switch between project dire
 - Atomic file operations for config safety
 - Config export/import for team sharing
 - Doctor command for troubleshooting
+- Interactive project selection (no args)
+- Shell tab completion for project names
 
 ## Requirements
 
@@ -27,13 +29,26 @@ cd cdp-cli
 npm install
 npm run build
 npm link
-cdp setup
+cdp setup --completion  # Install wrapper + tab completion
 source ~/.zshrc  # or source ~/.bashrc
 ```
 
 ## Shell Integration
 
 CDP needs a shell wrapper to change directories. The `cdp setup` command adds it automatically, or add manually:
+
+### Interactive Mode (with wrapper)
+```bash
+cdp
+# Shows numbered list of projects for selection
+# Select a project by number or name
+```
+
+### Tab Completion (with --completion)
+```bash
+cdp api<TAB>  # Completes project names
+cdp <TAB>     # Shows all commands and projects
+```
 
 ### zsh (~/.zshrc)
 ```bash
