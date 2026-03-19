@@ -26,19 +26,8 @@ cd myproject          # now you're there
 
 ## Installation
 
-### Prerequisites
-
-- Node.js >= 20
-- macOS, Linux, or Windows with WSL
-
-### From source
-
 ```sh
-git clone https://github.com/ardakaraosmanoglu/cdp-cli.git
-cd cdp-cli
-npm install
-npm run build
-npm link
+npm install -g cdproject
 ```
 
 ### Shell setup
